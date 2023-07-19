@@ -38,7 +38,7 @@ namespace Color_Scripts
             yield return new WaitForSeconds(0.1f);
 
             target.GetComponent<MeshRenderer>().enabled = true;
-            target.GetComponent<MeshRenderer>().material.color = BallHandler.OneColor;
+            target.GetComponent<MeshRenderer>().material.color = BallHandler.ballColor;
             Destroy(gameObject);
         }
     }

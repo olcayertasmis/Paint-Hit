@@ -7,9 +7,23 @@ namespace Circle_Scripts
 {
     public class Circle : MonoBehaviour
     {
+        [Header("RotateValue")]
+        [SerializeField] private int minRotateValue;
+        [SerializeField] private int maxRotateValue;
+        private int _rotationSpeed;
+
+        [Header("OtherComponents")]
+        private LevelsHandler _levelsHandler;
+        private GameManager _gameManager;
+
         private void Start()
         {
-            transform.DOMoveY(0, 0.75f).SetEase(Ease.InCirc).OnComplete(() => { Test(); });
+            _gameManager = GameManager.Instance;
+            _levelsHandler = _gameManager.levelsHandler;
+
+            _rotationSpeed = Random.Range(minRotateValue, maxRotateValue);
+
+            transform.DOMoveY(0, 1f).SetEase(Ease.OutBounce).OnComplete(() => { Test(); });
         }
 
         private void Update()
@@ -19,12 +33,12 @@ namespace Circle_Scripts
 
         private void Test()
         {
-            Debug.Log("sd");
+            Debug.Log("Test");
         }
 
         private void RotateCircle()
         {
-            transform.Rotate(Vector3.up*Time.deltaTime*BallHandler.RotationSpeed);
+            transform.Rotate(Vector3.up * (Time.deltaTime * (_rotationSpeed + (_levelsHandler.level * (Random.Range(1, 3))))));
         }
     }
 }
