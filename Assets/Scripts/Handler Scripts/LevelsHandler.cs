@@ -12,6 +12,7 @@ namespace Handler_Scripts
         [SerializeField] private GameObject circlePrefab;
         [SerializeField] private Transform spawnedCircles;
         private List<GameObject> _circles;
+        private bool _canChangeColor;
 
         [Header("Level")]
         public int level;
@@ -29,6 +30,14 @@ namespace Handler_Scripts
             {
                 foreach (var circle in _circles)
                 {
+                    if (circle == _circles[^1])
+                    {
+                        foreach (Transform _circle in circle.transform)
+                        {
+                            _circle.GetComponent<MeshRenderer>().material.DOColor(BallHandler.ballColor, 0.25f);
+                        }
+                    }
+
                     if (circle.transform.position.y <= -10)
                     {
                         circle.transform.DOScale(0, 1f).OnComplete(delegate { circle.gameObject.SetActive(false); });

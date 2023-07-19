@@ -53,7 +53,6 @@ namespace Handler_Scripts
             _ballsCount--;
 
             if (_ballsCount > 0) return;
-            //_canShot = false;
             StartCoroutine(InvokeFromLevelsHandler());
         }
 
