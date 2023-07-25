@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    [Header("GameManager")]
+    [Header("Instance")]
     public static GameManager Instance;
 
     [Header("GameState")]
-    private GameStates _currentstate;
+    private GameStates _currentState;
 
     [Header("Handlers")]
     public LevelsHandler levelsHandler;
@@ -34,15 +34,15 @@ public class GameManager : MonoBehaviour
 
     public GameStates CurrentState(GameStates value)
     {
-        _currentstate = value;
+        _currentState = value;
 
         switch (value)
         {
             case GameStates.Gamestart:
                 levelsHandler.MakeANewCircle();
-                CurrentState(GameStates.Playıng);
+                CurrentState(GameStates.Playing);
                 break;
-            case GameStates.Playıng:
+            case GameStates.Playing:
                 break;
             case GameStates.Gameover:
                 break;
@@ -52,14 +52,14 @@ public class GameManager : MonoBehaviour
                 break;
         }
 
-        return _currentstate;
+        return _currentState;
     }
 }
 
 public enum GameStates
 {
     Gamestart,
-    Playıng,
+    Playing,
     Gameover,
     Menu
 }

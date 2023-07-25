@@ -15,7 +15,7 @@ namespace Handler_Scripts
         private int _ballsCount;
         [SerializeField] private float ballSpeed;
         public static Color ballColor;
-        [SerializeField] private GameObject ballPrefab;
+        [SerializeField] private Ball ballPrefab;
         [SerializeField] private Transform dummyBall;
 
 
@@ -24,7 +24,7 @@ namespace Handler_Scripts
             _gameManager = GameManager.Instance;
             _levelsHandler = _gameManager.levelsHandler;
 
-            SetBallColorRandom();
+            GetRandomBallColor();
 
             _ballsCount = _levelsHandler.level;
         }
@@ -39,16 +39,16 @@ namespace Handler_Scripts
             }
         }
 
-        private void SetBallColorRandom()
+        private void GetRandomBallColor()
         {
             ballColor = new Color(Random.Range(0f, 1f), Random.Range(0f, 1f), Random.Range(0f, 1f));
         }
 
         private void HitBall()
         {
-            GameObject thrownBall = Instantiate(ballPrefab, dummyBall.position, Quaternion.identity);
-            thrownBall.GetComponent<MeshRenderer>().material.color = ballColor;
-            thrownBall.GetComponent<Rigidbody>().AddForce(Vector3.forward * ballSpeed, ForceMode.Impulse);
+            var newBall = Instantiate(ballPrefab, dummyBall.position, Quaternion.identity);
+            newBall.ChangeColor(ballColor);
+            newBall.Thrown(ballSpeed);
 
             _ballsCount--;
 
@@ -64,7 +64,7 @@ namespace Handler_Scripts
 
             yield return new WaitForSeconds(.6f);
             _ballsCount = _levelsHandler.level;
-            SetBallColorRandom();
+            GetRandomBallColor();
         }
     }
 }
