@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using Handler_Scripts;
+using Managers;
 
 namespace Circle_Scripts
 {
@@ -18,7 +19,7 @@ namespace Circle_Scripts
 
         private void Start()
         {
-            _gameManager = GameManager.Instance;
+            _gameManager = Singleton.Instance.GameManager;
             _levelsHandler = _gameManager.levelsHandler;
 
             _rotationSpeed = Random.Range(minRotateValue, maxRotateValue);

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Circle_Scripts;
 using UnityEngine;
 using DG.Tweening;
+using Managers;
 using Random = UnityEngine.Random;
 
 namespace Handler_Scripts
@@ -63,7 +64,7 @@ namespace Handler_Scripts
             newCircle.transform.position = new Vector3(0, 20, 23);
             newCircle.name = "Circle";
 
-            SetTarget(newCircle);
+            SetObstacle(newCircle);
 
             _circles.Add(newCircle);
         }
@@ -73,7 +74,7 @@ namespace Handler_Scripts
             circle.transform.DOMoveY(circle.transform.position.y - 3f, 0.9f).SetEase(Ease.InBounce);
         }
 
-        private void SetTarget(GameObject circle)
+        private void SetObstacle(GameObject circle)
         {
             int obstacleCount;
             if (level >= circle.transform.childCount * 2) obstacleCount = circle.transform.childCount - 1;
@@ -91,13 +92,13 @@ namespace Handler_Scripts
                 int randomNumber = Random.Range(0, circle.transform.childCount);
 
                 var circleTarget = circle.transform.GetChild(randomNumber);
-                var targetMesh = circleTarget.gameObject.GetComponent<MeshRenderer>();
+                var obstacleMesh = circleTarget.gameObject.GetComponent<MeshRenderer>();
 
-                if (!targetMesh.enabled)
+                if (!obstacleMesh.enabled)
                 {
                     circleTarget.tag = "Red";
-                    targetMesh.enabled = true;
-                    targetMesh.material.DOColor(Color.black, 0.5f);
+                    obstacleMesh.enabled = true;
+                    obstacleMesh.material.DOColor(Color.black, 0.5f);
                 }
                 else i--;
             }
