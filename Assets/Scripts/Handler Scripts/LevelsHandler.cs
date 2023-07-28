@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using Circle_Scripts;
 using UnityEngine;
 using DG.Tweening;
 using Managers;
@@ -19,11 +17,16 @@ namespace Handler_Scripts
         [Header("Level")]
         public int level;
 
+        [Header("Managers")]
         private UIManager _uiManager;
+        private GameManager _gameManager;
+        private BallHandler _ballHandler;
 
         private void Awake()
         {
             _uiManager = Singleton.Instance.UIManager;
+            _gameManager = Singleton.Instance.GameManager;
+            _ballHandler = _gameManager.ballHandler;
 
             _circles = new List<GameObject>();
 
@@ -40,7 +43,7 @@ namespace Handler_Scripts
                     {
                         foreach (Transform _circle in circle.transform)
                         {
-                            _circle.GetComponent<MeshRenderer>().material.DOColor(BallHandler.ballColor, 0.25f);
+                            _circle.GetComponent<MeshRenderer>().material.DOColor(_ballHandler.ballColor, 0.25f);
                         }
                     }
 

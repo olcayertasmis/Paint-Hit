@@ -8,6 +8,7 @@ namespace Managers
         //public AudioManager AudioManager { get; private set; }
         public UIManager UIManager { get; private set; }
         public GameManager GameManager { get; private set; }
+        public ObjectPool ObjectPool { get; private set; }
 
         private void Awake()
         {
@@ -21,6 +22,7 @@ namespace Managers
             //AudioManager = GetComponentInChildren<AudioManager>();
             UIManager = GetComponentInChildren<UIManager>();
             GameManager = GetComponentInChildren<GameManager>();
+            ObjectPool = GetComponentInChildren<ObjectPool>();
         }
     }
 }

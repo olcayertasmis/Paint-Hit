@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using Handler_Scripts;

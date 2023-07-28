@@ -1,6 +1,6 @@
-using System;
 using System.Collections;
 using Handler_Scripts;
+using Managers;
 using UnityEngine;
 
 namespace Color_Scripts
@@ -13,11 +13,13 @@ namespace Color_Scripts
             {
                 gameObject.GetComponent<Collider>().enabled = false;
 
-                target.gameObject.GetComponent<MeshRenderer>().enabled = true;
-                target.gameObject.GetComponent<MeshRenderer>().material.color = Color.red;
+                var targetMesh = target.gameObject.GetComponent<MeshRenderer>();
+                targetMesh.enabled = true;
+                targetMesh.material.color = Color.red;
 
                 gameObject.GetComponent<Rigidbody>().AddForce(Vector3.down * 50, ForceMode.Impulse);
-                Destroy(gameObject, .5f);
+
+                StartCoroutine(BallDestroy(gameObject, .5f));
             }
             else
             {
@@ -33,13 +35,22 @@ namespace Color_Scripts
             }
         }
 
-        IEnumerator ChangeColor(GameObject target)
+        private IEnumerator ChangeColor(GameObject target)
         {
             yield return new WaitForSeconds(0.1f);
 
-            target.GetComponent<MeshRenderer>().enabled = true;
-            target.GetComponent<MeshRenderer>().material.color = BallHandler.ballColor;
-            Destroy(gameObject);
+            var targetMesh = target.GetComponent<MeshRenderer>();
+            targetMesh.enabled = true;
+            targetMesh.material.color = Singleton.Instance.GameManager.ballHandler.ballColor;
+
+            StartCoroutine(BallDestroy(gameObject, 0));
+        }
+
+        private IEnumerator BallDestroy(GameObject ball, float timer)
+        {
+            yield return new WaitForSeconds(timer);
+
+            Singleton.Instance.ObjectPool.ReturnToPool(0, ball);
         }
     }
 }

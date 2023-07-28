@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -12,39 +11,42 @@ namespace Managers
     {
         [Header("Level")]
         [SerializeField] private TextMeshProUGUI levelText;
-        private string _levelString = "LEVEL : ";
+        private const string LevelString = "LEVEL : ";
 
         [Header("BG")]
         [SerializeField] private Image bg;
         [SerializeField] private List<Sprite> bgSprites = new List<Sprite>();
 
         [Header("Ball")]
-        [SerializeField] private List<Image> balls = new List<Image>();
+        [SerializeField] private List<Image> balls;
         [SerializeField] private Image ballSprite;
         [SerializeField] private TextMeshProUGUI ballCountText;
         [SerializeField] private Transform ballsSpawner;
 
         [Header("Heart")]
-        [SerializeField] private List<Image> hearts = new List<Image>();
+        [SerializeField] private List<Image> hearts;
         [SerializeField] private Image heartSprite;
         [SerializeField] private Transform heartSpawner;
-        private int heartCountt = 3;
 
         private void Awake()
         {
-            bg.sprite = bgSprites[Random.Range(0, bgSprites.Count)];
+            //bgSprites = new List<Sprite>();
+            balls = new List<Image>();
+            hearts = new List<Image>();
+
+            
         }
 
         private void Start()
         {
-            levelText.text = _levelString + 1;
-
-            FillHeartSprites();
+            bg.sprite = bgSprites[Random.Range(0, bgSprites.Count)];
+            
+            levelText.text = LevelString + 1;
         }
 
         public void UpdateLevelText(int levelNumber)
         {
-            levelText.text = _levelString + levelNumber;
+            levelText.text = LevelString + levelNumber;
         }
 
         public void FillBallSprites(int ballCount, int levelCount)
@@ -81,9 +83,9 @@ namespace Managers
             ballCountText.text = ballCount + " / " + levelCount;
         }
 
-        private void FillHeartSprites()
+        public void FillHeartSprites(int heartCount)
         {
-            for (int i = 0; i < heartCountt; i++)
+            for (int i = 0; i < heartCount; i++)
             {
                 var newHeart = Instantiate(heartSprite, heartSpawner);
 
