@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -28,19 +29,13 @@ namespace Managers
         [SerializeField] private Image heartSprite;
         [SerializeField] private Transform heartSpawner;
 
-        private void Awake()
+        private void Start()
         {
-            //bgSprites = new List<Sprite>();
             balls = new List<Image>();
             hearts = new List<Image>();
 
-            
-        }
-
-        private void Start()
-        {
             bg.sprite = bgSprites[Random.Range(0, bgSprites.Count)];
-            
+
             levelText.text = LevelString + 1;
         }
 
@@ -63,7 +58,17 @@ namespace Managers
 
         public void DecreaseBallSprites(int ballCount, int levelCount)
         {
+            bool isRemove = false;
+
             balls.RemoveAt(balls.Count - 1);
+
+            foreach (Transform ball in ballsSpawner)
+            {
+                if (!ball.gameObject.activeSelf) continue;
+                if (isRemove) continue;
+                ball.gameObject.SetActive(false);
+                isRemove = true;
+            }
 
             UpdateBallsCountText(ballCount, levelCount);
         }

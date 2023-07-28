@@ -12,13 +12,10 @@ namespace Ball_Scripts
         [Header("Other Scripts")]
         private UIManager _uiManager;
 
-        private void Awake()
-        {
-            _uiManager = Singleton.Instance.UIManager;
-        }
-
         private void Start()
         {
+            _uiManager = Singleton.Instance.UIManager;
+            
             _uiManager.FillHeartSprites(heart);
         }
 
