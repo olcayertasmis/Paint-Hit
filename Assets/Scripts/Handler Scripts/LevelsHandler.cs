@@ -19,8 +19,12 @@ namespace Handler_Scripts
         [Header("Level")]
         public int level;
 
+        private UIManager _uiManager;
+
         private void Awake()
         {
+            _uiManager = Singleton.Instance.UIManager;
+
             _circles = new List<GameObject>();
 
             level = 0;
@@ -54,6 +58,7 @@ namespace Handler_Scripts
             SpawnCircle();
 
             level++;
+            _uiManager.UpdateLevelText(level);
         }
 
         private void SpawnCircle()
