@@ -7,6 +7,7 @@ using UnityEngine.UI;
 using Random = UnityEngine.Random;
 using DG.Tweening;
 using Handler_Scripts;
+using UnityEngine.SceneManagement;
 
 namespace Managers
 {
@@ -16,7 +17,7 @@ namespace Managers
         [SerializeField] private TextMeshProUGUI levelText;
         private const string LevelString = "LEVEL : ";
 
-        [Header("BG")]
+        [Header("BackGround")]
         [SerializeField] private Image bg;
         [SerializeField] private List<Sprite> bgSprites;
 
@@ -38,6 +39,13 @@ namespace Managers
         [Header("Other Scripts")]
         private Health _health;
 
+        [Header("Screen Panels")]
+        [SerializeField] private GameObject failScreen;
+        [SerializeField] private GameObject pauseScreen;
+        [SerializeField] private GameObject gamePlayScreen;
+        [SerializeField] private GameObject menuScreen;
+
+
         private void Awake()
         {
             _gameManager = Singleton.Instance.GameManager;
@@ -57,8 +65,9 @@ namespace Managers
             _ballHandler.OnHitBall += BallHandler_OnHitBall;
             _gameManager.GetLevelHandler().OnLevelUp += LevelHandler_OnLevelUp;
             _ballHandler.OnFillBallSprites += BallHandler_OnFillBallSprites;
-            _health.OnDecreaseHeart += Health_DecreaseHeartSprites;
+            _health.OnDecreaseHeart += Health_DecreaseHeart;
             _health.OnFillHeartSprites += Health_FillHeartSprites;
+            _gameManager.GameOver += OnGameOver;
         }
 
         #region EventListeners
@@ -78,7 +87,7 @@ namespace Managers
             FillBallSprites(ballCount, levelCount);
         }
 
-        private void Health_DecreaseHeartSprites(int heartCount)
+        private void Health_DecreaseHeart(int heartCount)
         {
             DecreaseHeartSprites(heartCount);
         }
@@ -86,6 +95,11 @@ namespace Managers
         private void Health_FillHeartSprites(int heartCount)
         {
             FillHeartSprites(heartCount);
+        }
+
+        private void OnGameOver()
+        {
+            GameOver();
         }
 
         #endregion
@@ -167,12 +181,61 @@ namespace Managers
             }
         }
 
+        public void PauseGameButton()
+        {
+            Time.timeScale = 0;
+            ChangePanelsStatus(false, false, true, false);
+        }
+
+        public void ContinueGameButton()
+        {
+            Time.timeScale = 1;
+            ChangePanelsStatus(true, false, false, false);
+        }
+
+        public void HomeButton()
+        {
+            ChangePanelsStatus(false, false, false, true);
+            _gameManager.ChangeState(GameStates.Menu);
+        }
+
+        public void StartGame()
+        {
+            ChangePanelsStatus(true, false, false, false);
+            _gameManager.ChangeState(GameStates.GameStart);
+        }
+
+        private void GameOver()
+        {
+            ChangePanelsStatus(false, true, false, false);
+        }
+
+        public void RestartGame()
+        {
+            _gameManager.ChangeState(GameStates.Restart);
+            var activeScene = SceneManager.GetActiveScene();
+            SceneManager.LoadScene(activeScene.name);
+        }
+
+        public void ExitGame()
+        {
+            Application.Quit();
+        }
+
+        private void ChangePanelsStatus(bool gamePlayScreenBool, bool failScreenBool, bool pauseScreenBool, bool menuScreenBool)
+        {
+            gamePlayScreen.SetActive(gamePlayScreenBool);
+            failScreen.SetActive(failScreenBool);
+            pauseScreen.SetActive(pauseScreenBool);
+            menuScreen.SetActive(menuScreenBool);
+        }
+
         private void OnDisable()
         {
             _ballHandler.OnHitBall -= BallHandler_OnHitBall;
             _gameManager.GetLevelHandler().OnLevelUp -= LevelHandler_OnLevelUp;
             _ballHandler.OnFillBallSprites -= BallHandler_OnFillBallSprites;
-            _health.OnDecreaseHeart -= Health_DecreaseHeartSprites;
+            _health.OnDecreaseHeart -= Health_DecreaseHeart;
             _health.OnFillHeartSprites -= Health_FillHeartSprites;
         }
     }

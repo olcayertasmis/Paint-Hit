@@ -1,6 +1,4 @@
-using System;
 using System.Collections;
-using Ball_Scripts;
 using Handler_Scripts;
 using Managers;
 using UnityEngine;
@@ -9,9 +7,13 @@ namespace Color_Scripts
 {
     public class ColorChanger : MonoBehaviour
     {
+        [Header("Managers")]
         private GameManager _gameManager;
         private BallHandler _ballHandler;
         private LevelsHandler _levelsHandler;
+
+        [Header("Sound")]
+        [SerializeField] private AudioClip hit;
 
         private void Start()
         {
@@ -61,6 +63,8 @@ namespace Color_Scripts
             var targetMesh = target.GetComponent<MeshRenderer>();
             targetMesh.enabled = true;
             targetMesh.material.color = _ballHandler.ballColor;
+
+            Singleton.Instance.AudioManager.PlaySound(hit);
 
             StartCoroutine(BallDestroy(gameObject, 0));
         }

@@ -2,7 +2,6 @@ using System;
 using Ball_Scripts;
 using Handler_Scripts;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Managers
 {
@@ -18,12 +17,19 @@ namespace Managers
         [Header("Other Scripts")]
         [SerializeField] private Health health;
 
-        private void Start()
+        [Header("Action")]
+        public Action GameOver;
+
+        [Header("Audio")]
+        [SerializeField] private AudioClip gameFail;
+
+        private void Awake()
         {
-            CurrentState(GameStates.GameStart);
+            Time.timeScale = 0;
+            ChangeState(GameStates.Menu);
         }
 
-        public GameStates CurrentState(GameStates value)
+        public GameStates ChangeState(GameStates value)
         {
             _currentState = value;
 
@@ -31,13 +37,19 @@ namespace Managers
             {
                 case GameStates.GameStart:
                     levelsHandler.MakeANewCircle();
-                    CurrentState(GameStates.Playing);
+                    Time.timeScale = 1;
+                    ChangeState(GameStates.Playing);
                     break;
                 case GameStates.Playing:
                     break;
                 case GameStates.GameOver:
+                    Singleton.Instance.AudioManager.PlaySound(gameFail);
+                    GameOver?.Invoke();
                     break;
                 case GameStates.Menu:
+                    break;
+                case GameStates.Restart:
+                    Singleton.Instance.UIManager.StartGame();
                     break;
                 default:
                     break;
@@ -60,6 +72,7 @@ namespace Managers
         GameStart,
         Playing,
         GameOver,
-        Menu
+        Menu,
+        Restart
     }
 }

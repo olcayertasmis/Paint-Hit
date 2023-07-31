@@ -1,3 +1,4 @@
+using Managers;
 using UnityEngine;
 
 namespace Ball_Scripts
@@ -7,6 +8,14 @@ namespace Ball_Scripts
         [Header("Components")]
         [SerializeField] private MeshRenderer meshRenderer;
         [SerializeField] private Rigidbody rb;
+
+        [Header("Sound")]
+        [SerializeField] private AudioClip hit;
+
+        private void Start()
+        {
+            Singleton.Instance.AudioManager.PlaySound(hit);
+        }
 
         public void Thrown(float ballSpeed)
         {

@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
@@ -14,23 +15,23 @@ namespace Handler_Scripts
         [SerializeField] private Transform spawnedCircles;
         private List<GameObject> _circles;
         private bool _canChangeColor;
+        [SerializeField] private GameObject circleEffect;
 
         [Header("Level")]
         public int level;
 
         [Header("Managers")]
-        private UIManager _uiManager;
-        private GameManager _gameManager;
         private BallHandler _ballHandler;
-        
+
         [Header("Actions")]
         public Action<int> OnLevelUp;
 
+        [Header("Audio")]
+        [SerializeField] private AudioClip circleComplete;
+
         private void Awake()
         {
-            _uiManager = Singleton.Instance.UIManager;
-            _gameManager = Singleton.Instance.GameManager;
-            _ballHandler = _gameManager.GetBallHandler();
+            _ballHandler = Singleton.Instance.GameManager.GetBallHandler();
 
             _circles = new List<GameObject>();
 
@@ -64,9 +65,21 @@ namespace Handler_Scripts
 
             SpawnCircle();
 
+            Singleton.Instance.AudioManager.PlaySound(circleComplete);
+
+            StartCoroutine(CircleEffect());
+
             level++;
-            
+
             OnLevelUp?.Invoke(level);
+        }
+
+        private IEnumerator CircleEffect()
+        {
+            yield return new WaitForSeconds(.1f);
+            circleEffect.SetActive(true);
+            yield return new WaitForSeconds(.5f);
+            circleEffect.SetActive(false);
         }
 
         private void SpawnCircle()

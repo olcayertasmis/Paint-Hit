@@ -130,6 +130,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   meshRenderer: {fileID: 23200592636411104}
   rb: {fileID: 54344977147162746}
+  hit: {fileID: 0}
 --- !u!114 &6390194129730319956
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -142,3 +143,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 10aa31668e0064247a2cc97ed5d5fb54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hit: {fileID: 8300000, guid: b0e4db61738de204e89a7f2db70f888e, type: 3}
