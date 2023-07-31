@@ -1,5 +1,8 @@
+using System;
+using Ball_Scripts;
 using Handler_Scripts;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Managers
 {
@@ -9,12 +12,15 @@ namespace Managers
         private GameStates _currentState;
 
         [Header("Handlers")]
-        public LevelsHandler levelsHandler;
-        public BallHandler ballHandler;
+        [SerializeField] private LevelsHandler levelsHandler;
+        [SerializeField] private BallHandler ballHandler;
+
+        [Header("Other Scripts")]
+        [SerializeField] private Health health;
 
         private void Start()
         {
-            CurrentState(GameStates.Gamestart);
+            CurrentState(GameStates.GameStart);
         }
 
         public GameStates CurrentState(GameStates value)
@@ -23,13 +29,13 @@ namespace Managers
 
             switch (value)
             {
-                case GameStates.Gamestart:
+                case GameStates.GameStart:
                     levelsHandler.MakeANewCircle();
                     CurrentState(GameStates.Playing);
                     break;
                 case GameStates.Playing:
                     break;
-                case GameStates.Gameover:
+                case GameStates.GameOver:
                     break;
                 case GameStates.Menu:
                     break;
@@ -39,13 +45,21 @@ namespace Managers
 
             return _currentState;
         }
+
+        #region Helpers
+
+        public LevelsHandler GetLevelHandler() => levelsHandler;
+        public BallHandler GetBallHandler() => ballHandler;
+        public Health GetHealthHandler() => health;
+
+        #endregion
     }
 
     public enum GameStates
     {
-        Gamestart,
+        GameStart,
         Playing,
-        Gameover,
+        GameOver,
         Menu
     }
 }

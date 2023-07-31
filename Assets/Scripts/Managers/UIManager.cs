@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
+using Ball_Scripts;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
 using DG.Tweening;
+using Handler_Scripts;
 
 namespace Managers
 {
@@ -16,7 +18,7 @@ namespace Managers
 
         [Header("BG")]
         [SerializeField] private Image bg;
-        [SerializeField] private List<Sprite> bgSprites = new List<Sprite>();
+        [SerializeField] private List<Sprite> bgSprites;
 
         [Header("Ball")]
         [SerializeField] private List<Image> balls;
@@ -29,23 +31,74 @@ namespace Managers
         [SerializeField] private Image heartSprite;
         [SerializeField] private Transform heartSpawner;
 
+        [Header("Managers")]
+        private GameManager _gameManager;
+        private BallHandler _ballHandler;
+
+        [Header("Other Scripts")]
+        private Health _health;
+
+        private void Awake()
+        {
+            _gameManager = Singleton.Instance.GameManager;
+            _ballHandler = _gameManager.GetBallHandler();
+            _health = _gameManager.GetHealthHandler();
+        }
+
         private void Start()
         {
-            balls = new List<Image>();
-            hearts = new List<Image>();
-
             bg.sprite = bgSprites[Random.Range(0, bgSprites.Count)];
 
             levelText.text = LevelString + 1;
         }
 
-        public void UpdateLevelText(int levelNumber)
+        private void OnEnable()
+        {
+            _ballHandler.OnHitBall += BallHandler_OnHitBall;
+            _gameManager.GetLevelHandler().OnLevelUp += LevelHandler_OnLevelUp;
+            _ballHandler.OnFillBallSprites += BallHandler_OnFillBallSprites;
+            _health.OnDecreaseHeart += Health_DecreaseHeartSprites;
+            _health.OnFillHeartSprites += Health_FillHeartSprites;
+        }
+
+        #region EventListeners
+
+        private void BallHandler_OnHitBall(int ballCount, int levelCount)
+        {
+            DecreaseBallSprites(ballCount, levelCount);
+        }
+
+        private void LevelHandler_OnLevelUp(int level)
+        {
+            UpdateLevelText(level);
+        }
+
+        private void BallHandler_OnFillBallSprites(int ballCount, int levelCount)
+        {
+            FillBallSprites(ballCount, levelCount);
+        }
+
+        private void Health_DecreaseHeartSprites(int heartCount)
+        {
+            DecreaseHeartSprites(heartCount);
+        }
+
+        private void Health_FillHeartSprites(int heartCount)
+        {
+            FillHeartSprites(heartCount);
+        }
+
+        #endregion
+
+        private void UpdateLevelText(int levelNumber)
         {
             levelText.text = LevelString + levelNumber;
         }
 
-        public void FillBallSprites(int ballCount, int levelCount)
+        private void FillBallSprites(int ballCount, int levelCount)
         {
+            ResetBallSprites();
+
             UpdateBallsCountText(ballCount, levelCount);
 
             for (int i = 0; i < levelCount; i++)
@@ -56,7 +109,7 @@ namespace Managers
             }
         }
 
-        public void DecreaseBallSprites(int ballCount, int levelCount)
+        private void DecreaseBallSprites(int ballCount, int levelCount)
         {
             bool isRemove = false;
 
@@ -73,7 +126,7 @@ namespace Managers
             UpdateBallsCountText(ballCount, levelCount);
         }
 
-        public void ResetBallSprites()
+        private void ResetBallSprites()
         {
             balls.Clear();
 
@@ -88,7 +141,7 @@ namespace Managers
             ballCountText.text = ballCount + " / " + levelCount;
         }
 
-        public void FillHeartSprites(int heartCount)
+        private void FillHeartSprites(int heartCount)
         {
             for (int i = 0; i < heartCount; i++)
             {
@@ -98,7 +151,7 @@ namespace Managers
             }
         }
 
-        public void DecreaseHeartSprites(int heartCount)
+        private void DecreaseHeartSprites(int heartCount)
         {
             switch (heartCount)
             {
@@ -112,6 +165,15 @@ namespace Managers
                     hearts[heartCount].DOColor(Color.black, 0.5f);
                     break;
             }
+        }
+
+        private void OnDisable()
+        {
+            _ballHandler.OnHitBall -= BallHandler_OnHitBall;
+            _gameManager.GetLevelHandler().OnLevelUp -= LevelHandler_OnLevelUp;
+            _ballHandler.OnFillBallSprites -= BallHandler_OnFillBallSprites;
+            _health.OnDecreaseHeart -= Health_DecreaseHeartSprites;
+            _health.OnFillHeartSprites -= Health_FillHeartSprites;
         }
     }
 }

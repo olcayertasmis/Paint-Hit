@@ -9,21 +9,27 @@ namespace Ball_Scripts
         [Header("Stats")]
         [SerializeField] private int heart;
 
-        [Header("Other Scripts")]
+        [Header("Managers")]
         private UIManager _uiManager;
+
+        [Header("Actions")]
+        public Action<int> OnDecreaseHeart;
+        public Action<int> OnFillHeartSprites;
 
         private void Start()
         {
             _uiManager = Singleton.Instance.UIManager;
-            
-            _uiManager.FillHeartSprites(heart);
+
+            OnFillHeartSprites?.Invoke(heart);
+            //_uiManager.FillHeartSprites(heart);
         }
 
         public void DecreaseHeart(int amount)
         {
             heart -= amount;
 
-            _uiManager.DecreaseHeartSprites(heart);
+            OnDecreaseHeart?.Invoke(heart);
+            //_uiManager.DecreaseHeartSprites(heart);
         }
     }
 }

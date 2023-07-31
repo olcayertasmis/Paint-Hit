@@ -19,7 +19,7 @@ namespace Circle_Scripts
         private void Start()
         {
             _gameManager = Singleton.Instance.GameManager;
-            _levelsHandler = _gameManager.levelsHandler;
+            _levelsHandler = _gameManager.GetLevelHandler();
 
             _rotationSpeed = Random.Range(minRotateValue, maxRotateValue);
 

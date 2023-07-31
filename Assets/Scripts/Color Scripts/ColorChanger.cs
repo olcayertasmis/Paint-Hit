@@ -1,4 +1,7 @@
+using System;
 using System.Collections;
+using Ball_Scripts;
+using Handler_Scripts;
 using Managers;
 using UnityEngine;
 
@@ -6,6 +9,17 @@ namespace Color_Scripts
 {
     public class ColorChanger : MonoBehaviour
     {
+        private GameManager _gameManager;
+        private BallHandler _ballHandler;
+        private LevelsHandler _levelsHandler;
+
+        private void Start()
+        {
+            _gameManager = Singleton.Instance.GameManager;
+            _ballHandler = _gameManager.GetBallHandler();
+            _levelsHandler = _gameManager.GetLevelHandler();
+        }
+
         private void OnCollisionEnter(Collision target)
         {
             if (target.gameObject.CompareTag("Red"))
@@ -19,9 +33,13 @@ namespace Color_Scripts
                 gameObject.GetComponent<Rigidbody>().AddForce(Vector3.down * 50, ForceMode.Impulse);
 
                 StartCoroutine(BallDestroy(gameObject, .5f));
+
+                _gameManager.GetHealthHandler().DecreaseHeart(1);
             }
             else
             {
+                _ballHandler.accurateBall++;
+
                 gameObject.GetComponent<Collider>().enabled = false;
 
                 GameObject splash = Instantiate(Resources.Load("splash1"), target.gameObject.transform, true) as GameObject;
@@ -31,6 +49,8 @@ namespace Color_Scripts
                 target.gameObject.tag = "Red";
 
                 StartCoroutine(ChangeColor(target.gameObject));
+
+                if (_ballHandler.accurateBall == _levelsHandler.level) _ballHandler.StartCoroutine(_ballHandler.InvokeFromLevelsHandler());
             }
         }
 
@@ -40,7 +60,7 @@ namespace Color_Scripts
 
             var targetMesh = target.GetComponent<MeshRenderer>();
             targetMesh.enabled = true;
-            targetMesh.material.color = Singleton.Instance.GameManager.ballHandler.ballColor;
+            targetMesh.material.color = _ballHandler.ballColor;
 
             StartCoroutine(BallDestroy(gameObject, 0));
         }

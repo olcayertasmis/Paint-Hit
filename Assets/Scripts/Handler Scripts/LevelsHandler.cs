@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
@@ -21,12 +22,15 @@ namespace Handler_Scripts
         private UIManager _uiManager;
         private GameManager _gameManager;
         private BallHandler _ballHandler;
+        
+        [Header("Actions")]
+        public Action<int> OnLevelUp;
 
         private void Awake()
         {
             _uiManager = Singleton.Instance.UIManager;
             _gameManager = Singleton.Instance.GameManager;
-            _ballHandler = _gameManager.ballHandler;
+            _ballHandler = _gameManager.GetBallHandler();
 
             _circles = new List<GameObject>();
 
@@ -61,7 +65,8 @@ namespace Handler_Scripts
             SpawnCircle();
 
             level++;
-            _uiManager.UpdateLevelText(level);
+            
+            OnLevelUp?.Invoke(level);
         }
 
         private void SpawnCircle()
