@@ -20,7 +20,7 @@ namespace Circle_Scripts
 
             _rotationSpeed = Random.Range(minRotateValue, maxRotateValue);
 
-            transform.DOMoveY(-2, .8f).SetEase(Ease.OutBounce);
+            transform.DOMoveY(-2f, 1f).SetEase(Ease.OutBounce);
         }
 
         private void Update()

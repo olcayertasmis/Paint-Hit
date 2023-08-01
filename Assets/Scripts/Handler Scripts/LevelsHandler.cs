@@ -94,7 +94,7 @@ namespace Handler_Scripts
 
         private void SlideDown(GameObject circle)
         {
-            circle.transform.DOMoveY(circle.transform.position.y - 3f, 0.9f).SetEase(Ease.InBounce);
+            circle.transform.DOMoveY(circle.transform.position.y - 3f, 0.5f).SetEase(Ease.OutBounce);
         }
 
         private void SetObstacle(GameObject circle)
