@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Sound
+namespace AudioScripts
 {
     public class ToggleImage : MonoBehaviour
     {

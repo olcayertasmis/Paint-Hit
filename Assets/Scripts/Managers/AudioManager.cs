@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Managers
@@ -14,14 +15,21 @@ namespace Managers
         }
 
         [Header("Sounds")]
-        [SerializeField] private Sound.Sound[] musics;
-        [SerializeField] private Sound.Sound[] effects;
+        [SerializeField] private AudioScripts.Sound[] musics;
+        [SerializeField] private AudioScripts.Sound[] effects;
+
+        [Header("AudioSources")]
+        [SerializeField] private Transform musicFolder;
+        [SerializeField] private Transform effectFolder;
+
+        //private List<AudioSource> _musicSources;
+        //private List<AudioSource> _effectSources;
 
         private void Awake()
         {
             foreach (var music in musics)
             {
-                music.source = gameObject.AddComponent<AudioSource>();
+                music.source = musicFolder.gameObject.AddComponent<AudioSource>();
                 music.source.clip = music.clip;
 
                 music.source.volume = music.volume;
@@ -32,7 +40,7 @@ namespace Managers
 
             foreach (var effect in effects)
             {
-                effect.source = gameObject.AddComponent<AudioSource>();
+                effect.source = effectFolder.gameObject.AddComponent<AudioSource>();
                 effect.source.clip = effect.clip;
 
                 effect.source.volume = effect.volume;
@@ -52,23 +60,31 @@ namespace Managers
             musicSound.source.Play();
         }
 
-        public void ToggleMusic()
+        public void ToggleMusics()
         {
-            foreach (var music in musics)
+            foreach (Transform folderType in gameObject.transform)
             {
-                music.source = gameObject.GetComponent<AudioSource>();
+                if (folderType != musicFolder) continue;
+                var musicSources = folderType.GetComponents<AudioSource>();
 
-                music.source.mute = !music.source.mute;
+                foreach (var musicSource in musicSources)
+                {
+                    musicSource.mute = !musicSource.mute;
+                }
             }
         }
 
         public void ToggleEffects()
         {
-            foreach (var effect in effects)
+            foreach (Transform folderType in gameObject.transform)
             {
-                effect.source = gameObject.GetComponent<AudioSource>();
+                if (folderType != effectFolder) continue;
+                var effectSources = folderType.GetComponents<AudioSource>();
 
-                effect.source.mute = !effect.source.mute;
+                foreach (var effectSource in effectSources)
+                {
+                    effectSource.mute = !effectSource.mute;
+                }
             }
         }
     }

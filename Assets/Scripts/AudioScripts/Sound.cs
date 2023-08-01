@@ -1,7 +1,7 @@
 using Managers;
 using UnityEngine;
 
-namespace Sound
+namespace AudioScripts
 {
     [System.Serializable]
     public class Sound
