@@ -87,6 +87,7 @@ namespace Handler_Scripts
 
             OnFillBallSprites?.Invoke(_ballsCount, _levelsHandler.level + 2);
 
+            yield return new WaitForSeconds(2f);
             _isShoot = true;
         }
     }

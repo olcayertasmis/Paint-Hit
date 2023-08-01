@@ -12,9 +12,9 @@ namespace Managers
 {
     public class UIManager : MonoBehaviour
     {
-        [Header("Level")]
-        [SerializeField] private TextMeshProUGUI levelText;
-        private const string LevelString = "LEVEL : ";
+        [Header("Screen Panels")]
+        [SerializeField] private CanvasGroup failScreen;
+        [SerializeField] private CanvasGroup pauseScreen, gamePlayScreen;
 
         [Header("BackGround")]
         [SerializeField] private Image bg;
@@ -38,9 +38,9 @@ namespace Managers
         [Header("Other Scripts")]
         private Health _health;
 
-        [Header("Screen Panels")]
-        [SerializeField] private CanvasGroup failScreen;
-        [SerializeField] private CanvasGroup pauseScreen, gamePlayScreen;
+        [Header("Level")]
+        [SerializeField] private TextMeshProUGUI levelText;
+        private const string LevelString = "LEVEL : ";
 
         private void Awake()
         {
