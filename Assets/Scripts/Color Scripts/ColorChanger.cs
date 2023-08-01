@@ -42,6 +42,8 @@ namespace Color_Scripts
                 gameObject.GetComponent<Collider>().enabled = false;
 
                 GameObject splash = Instantiate(Resources.Load("splash1"), target.gameObject.transform, true) as GameObject;
+                splash.gameObject.GetComponent<SpriteRenderer>().color = _ballHandler.ballColor;
+
                 Destroy(splash, 0.1f);
 
                 target.gameObject.name = "color";
