@@ -51,9 +51,6 @@ public class ObjectPool : MonoBehaviour
         {
             Rigidbody rb = obj.GetComponent<Rigidbody>();
             rb.velocity = Vector3.zero;
-            //rb.angularVelocity = Vector3.zero;
-
-            //obj.transform.rotation = Quaternion.identity;
 
             obj.SetActive(false);
             pools[objectType].PooledObjects.Enqueue(obj);

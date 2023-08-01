@@ -20,13 +20,9 @@ namespace Managers
         [Header("Action")]
         public Action GameOver;
 
-        [Header("Audio")]
-        [SerializeField] private AudioClip gameFail;
-
-        private void Awake()
+        private void Start()
         {
-            Time.timeScale = 0;
-            ChangeState(GameStates.Menu);
+            ChangeState(GameStates.GameStart);
         }
 
         public GameStates ChangeState(GameStates value)
@@ -37,19 +33,20 @@ namespace Managers
             {
                 case GameStates.GameStart:
                     levelsHandler.MakeANewCircle();
-                    Time.timeScale = 1;
                     ChangeState(GameStates.Playing);
                     break;
                 case GameStates.Playing:
+                    Singleton.Instance.AudioManager.PlayMusicSound(AudioManager.SoundType.BackgroundMusic);
+                    Singleton.Instance.UIManager.StartGame();
                     break;
                 case GameStates.GameOver:
-                    Singleton.Instance.AudioManager.PlaySound(gameFail);
+                    Singleton.Instance.AudioManager.PlayEffectSound(AudioManager.SoundType.Fail);
                     GameOver?.Invoke();
                     break;
                 case GameStates.Menu:
+                    Singleton.Instance.UIManager.Menu();
                     break;
                 case GameStates.Restart:
-                    Singleton.Instance.UIManager.StartGame();
                     break;
                 default:
                     break;

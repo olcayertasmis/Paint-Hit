@@ -20,6 +20,7 @@ namespace Handler_Scripts
         [SerializeField] private Transform dummyBall;
         [HideInInspector] public int accurateBall;
         [HideInInspector] public Color ballColor;
+        private bool _isShoot;
 
         [Header("Actions")]
         public Action<int, int> OnHitBall;
@@ -27,6 +28,8 @@ namespace Handler_Scripts
 
         private void Start()
         {
+            _isShoot = true;
+
             _objectPool = Singleton.Instance.ObjectPool;
 
             _levelsHandler = Singleton.Instance.GameManager.GetLevelHandler();
@@ -42,7 +45,7 @@ namespace Handler_Scripts
         {
             if (context.phase == InputActionPhase.Performed)
             {
-                if (_ballsCount <= 0) return;
+                if (_ballsCount <= 0 && !_isShoot) return;
                 HitBall();
             }
         }
@@ -70,17 +73,21 @@ namespace Handler_Scripts
 
         public IEnumerator InvokeFromLevelsHandler()
         {
+            _isShoot = false;
+
             yield return new WaitForSeconds(.4f);
             accurateBall = 0;
 
             _levelsHandler.MakeANewCircle();
 
-            yield return new WaitForSeconds(.6f);
+            yield return new WaitForSeconds(.8f);
             _ballsCount = _levelsHandler.level + 2;
 
             GetRandomBallColor();
 
             OnFillBallSprites?.Invoke(_ballsCount, _levelsHandler.level + 2);
+
+            _isShoot = true;
         }
     }
 }

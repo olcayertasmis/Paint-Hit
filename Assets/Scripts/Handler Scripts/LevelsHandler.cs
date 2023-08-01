@@ -26,9 +26,6 @@ namespace Handler_Scripts
         [Header("Actions")]
         public Action<int> OnLevelUp;
 
-        [Header("Audio")]
-        [SerializeField] private AudioClip circleComplete;
-
         private void Awake()
         {
             _ballHandler = Singleton.Instance.GameManager.GetBallHandler();
@@ -65,7 +62,7 @@ namespace Handler_Scripts
 
             SpawnCircle();
 
-            Singleton.Instance.AudioManager.PlaySound(circleComplete);
+            Singleton.Instance.AudioManager.PlayEffectSound(AudioManager.SoundType.CircleComplete);
 
             StartCoroutine(CircleEffect());
 

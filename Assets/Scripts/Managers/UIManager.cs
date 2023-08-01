@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using Ball_Scripts;
 using TMPro;
@@ -40,11 +39,8 @@ namespace Managers
         private Health _health;
 
         [Header("Screen Panels")]
-        [SerializeField] private GameObject failScreen;
-        [SerializeField] private GameObject pauseScreen;
-        [SerializeField] private GameObject gamePlayScreen;
-        [SerializeField] private GameObject menuScreen;
-
+        [SerializeField] private CanvasGroup failScreen;
+        [SerializeField] private CanvasGroup pauseScreen, gamePlayScreen;
 
         private void Awake()
         {
@@ -183,36 +179,33 @@ namespace Managers
 
         public void PauseGameButton()
         {
-            Time.timeScale = 0;
-            ChangePanelsStatus(false, false, true, false);
+            ChangePanelsStatus(false, false, true);
         }
 
         public void ContinueGameButton()
         {
-            Time.timeScale = 1;
-            ChangePanelsStatus(true, false, false, false);
+            ChangePanelsStatus(true, false, false);
         }
 
-        public void HomeButton()
+        public void Menu()
         {
-            ChangePanelsStatus(false, false, false, true);
-            _gameManager.ChangeState(GameStates.Menu);
+            SceneManager.LoadScene("Menu");
         }
 
         public void StartGame()
         {
-            ChangePanelsStatus(true, false, false, false);
-            _gameManager.ChangeState(GameStates.GameStart);
+            ChangePanelsStatus(true, false, false);
         }
 
         private void GameOver()
         {
-            ChangePanelsStatus(false, true, false, false);
+            ChangePanelsStatus(false, true, false);
         }
 
         public void RestartGame()
         {
             _gameManager.ChangeState(GameStates.Restart);
+            ChangePanelsStatus(true, false, false);
             var activeScene = SceneManager.GetActiveScene();
             SceneManager.LoadScene(activeScene.name);
         }
@@ -222,12 +215,15 @@ namespace Managers
             Application.Quit();
         }
 
-        private void ChangePanelsStatus(bool gamePlayScreenBool, bool failScreenBool, bool pauseScreenBool, bool menuScreenBool)
+        private void ChangePanelsStatus(bool gamePlayScreenBool, bool failScreenBool, bool pauseScreenBool)
         {
-            gamePlayScreen.SetActive(gamePlayScreenBool);
-            failScreen.SetActive(failScreenBool);
-            pauseScreen.SetActive(pauseScreenBool);
-            menuScreen.SetActive(menuScreenBool);
+            gamePlayScreen.blocksRaycasts = gamePlayScreenBool;
+            failScreen.blocksRaycasts = failScreenBool;
+            pauseScreen.blocksRaycasts = pauseScreenBool;
+
+            gamePlayScreen.DOFade(gamePlayScreenBool ? 1 : 0, 0.5f);
+            failScreen.DOFade(failScreenBool ? 1 : 0, 0.5f);
+            pauseScreen.DOFade(pauseScreenBool ? 1 : 0, 0.5f);
         }
 
         private void OnDisable()

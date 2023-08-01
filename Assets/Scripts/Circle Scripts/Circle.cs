@@ -8,32 +8,24 @@ namespace Circle_Scripts
     public class Circle : MonoBehaviour
     {
         [Header("RotateValue")]
-        [SerializeField] private int minRotateValue;
-        [SerializeField] private int maxRotateValue;
+        [SerializeField] private int minRotateValue, maxRotateValue;
         private int _rotationSpeed;
 
         [Header("OtherComponents")]
         private LevelsHandler _levelsHandler;
-        private GameManager _gameManager;
 
         private void Start()
         {
-            _gameManager = Singleton.Instance.GameManager;
-            _levelsHandler = _gameManager.GetLevelHandler();
+            _levelsHandler = Singleton.Instance.GameManager.GetLevelHandler();
 
             _rotationSpeed = Random.Range(minRotateValue, maxRotateValue);
 
-            transform.DOMoveY(0, 1f).SetEase(Ease.OutBounce).OnComplete(() => { Test(); });
+            transform.DOMoveY(-2, .8f).SetEase(Ease.OutBounce);
         }
 
         private void Update()
         {
             RotateCircle();
-        }
-
-        private void Test()
-        {
-            Debug.Log("Test");
         }
 
         private void RotateCircle()

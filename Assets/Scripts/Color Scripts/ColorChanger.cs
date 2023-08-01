@@ -12,9 +12,6 @@ namespace Color_Scripts
         private BallHandler _ballHandler;
         private LevelsHandler _levelsHandler;
 
-        [Header("Sound")]
-        [SerializeField] private AudioClip hit;
-
         private void Start()
         {
             _gameManager = Singleton.Instance.GameManager;
@@ -64,7 +61,7 @@ namespace Color_Scripts
             targetMesh.enabled = true;
             targetMesh.material.color = _ballHandler.ballColor;
 
-            Singleton.Instance.AudioManager.PlaySound(hit);
+            Singleton.Instance.AudioManager.PlayEffectSound(AudioManager.SoundType.BallHit);
 
             StartCoroutine(BallDestroy(gameObject, 0));
         }
